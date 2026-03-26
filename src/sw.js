@@ -1,5 +1,5 @@
-const CACHE_STATIC_NAME = 'static-v3';
-const CACHE_DYNAMIC_NAME = 'dynamic-v3';
+const CACHE_STATIC_NAME = 'static-v4';
+const CACHE_DYNAMIC_NAME = 'dynamic-v4';
 const CACHE_INMUTABLE_NAME = 'inmutable-v1';
 
 // Este método precachea el App Shell
@@ -12,6 +12,8 @@ self.addEventListener('install', event => {
                 './css/style.css',
                 './js/app.js',
                 './img/logo.png',
+                './pages/favorites.html',
+                './js/favorites.js',
                 './pages/offline.html'
             ]);
         });
