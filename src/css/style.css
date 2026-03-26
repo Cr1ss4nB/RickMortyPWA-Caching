@@ -1,14 +1,39 @@
 body {
-    background-color: #121212;
+    background-color: #0f172a;
     color: white;
+}
+
+h1 {
+    font-weight: bold;
 }
 
 .card {
-    background-color: #1e1e1e;
-    color: white;
-    margin-bottom: 15px;
+    background-color: #1e293b;
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s;
 }
 
-img {
-    border-radius: 10px;
+.card:hover {
+    transform: scale(1.03);
+}
+
+.card img {
+    height: 300px;
+    object-fit: cover;
+}
+
+.card-body {
+    text-align: center;
+}
+
+.badge {
+    margin: 2px;
+}
+
+.logo {
+    width: 200px;
+    max-width: 100%;
+    margin-bottom: 15px;
 }

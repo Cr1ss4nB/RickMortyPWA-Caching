@@ -1,5 +1,5 @@
-const CACHE_STATIC_NAME = 'static-v2';
-const CACHE_DYNAMIC_NAME = 'dynamic-v2';
+const CACHE_STATIC_NAME = 'static-v3';
+const CACHE_DYNAMIC_NAME = 'dynamic-v3';
 const CACHE_INMUTABLE_NAME = 'inmutable-v1';
 
 // Este método precachea el App Shell
@@ -15,6 +15,28 @@ self.addEventListener('install', event => {
                 './pages/offline.html'
             ]);
         });
+
+        // Limpiar caches antiguos
+    self.addEventListener('activate', event => {
+        const cacheWhitelist = [
+            CACHE_STATIC_NAME,
+            CACHE_DYNAMIC_NAME,
+            CACHE_INMUTABLE_NAME
+        ];
+        event.waitUntil(
+            caches.keys().then(keys => {
+                return Promise.all(
+                    keys.map(key => {
+                        if (!cacheWhitelist.includes(key)) {
+                            return caches.delete(key);
+                        }
+                    })
+                );
+            })
+        );
+    });
+
+    // Cache Inmutable -> No cambia nunca
     const cacheInmutable = caches.open(CACHE_INMUTABLE_NAME)
         .then(cache => {
             return cache.addAll([
@@ -24,6 +46,7 @@ self.addEventListener('install', event => {
     event.waitUntil(Promise.all([cacheStatic, cacheInmutable]));
 });
 
+// Este método intercepta las peticiones y responde con la estrategia adecuada
 self.addEventListener('fetch', event => {
     if (event.request.method !== 'GET') return;
     const url = event.request.url;
