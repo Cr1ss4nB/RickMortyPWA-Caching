@@ -18,7 +18,7 @@ function loadCharacters() {
             data.results.forEach(char => {
                 container.innerHTML += `
             <div class="col-md-4">
-            <div class="card">
+            <div class="card" onclick="showCharacter(${char.id})" style="cursor:pointer">
                 <img src="${char.image}">
                 <div class="card-body">
                 <h5>${char.name}</h5>
@@ -29,7 +29,7 @@ function loadCharacters() {
                 <p>Origen: ${char.origin.name}</p>
                 <p>Ubicación: ${char.location.name}</p>
 
-                <button class="btn btn-sm btn-primary mt-2" onclick="saveCharacter(${char.id})">
+                <button class="btn btn-sm btn-primary mt-2" onclick="event.stopPropagation(); saveCharacter(${char.id})">
                     Leer después
                 </button>
                 </div>
@@ -52,6 +52,27 @@ function saveCharacter(id) {
     } else {
         console.log('Ya existe');
     }
+}
+
+// Este método muestra el detalle del personaje en una ventana modal
+function showCharacter(id) {
+    fetch(`https://rickandmortyapi.com/api/character/${id}`)
+        .then(res => res.json())
+        .then(char => {
+            document.getElementById('modalTitle').innerText = char.name;
+            document.getElementById('modalImage').src = char.image;
+
+            document.getElementById('modalInfo').innerHTML = `
+                Estado: ${char.status} <br>
+                Especie: ${char.species} <br>
+                Género: ${char.gender} <br>
+                Origen: ${char.origin.name} <br>
+                Ubicación: ${char.location.name}
+            `;
+
+            $('#characterModal').modal('show');
+        })
+        .catch(err => console.log(err));
 }
 
 loadCharacters();
