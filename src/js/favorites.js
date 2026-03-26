@@ -1,21 +1,21 @@
-const container = document.getElementById("favoritesContainer");
+const favContainer = document.getElementById('favoritesContainer');
 
 // Este método carga los favoritos desde localStorage
 function loadFavorites() {
     const saved = JSON.parse(localStorage.getItem("favorites")) || [];
-
+    if (!favContainer) return;
     if (saved.length === 0) {
-        container.innerHTML = "<p>No hay elementos guardados</p>";
+        favContainer.innerHTML = "<p>No hay elementos guardados</p>";
         return;
     }
-
+    favContainer.innerHTML = "";
     saved.forEach((id) => {
         fetch(`https://rickandmortyapi.com/api/character/${id}`)
             .then((res) => res.json())
             .then((char) => {
-                container.innerHTML += `
+                favContainer.innerHTML += `
                     <div class="col-md-4">
-                        <div class="card">
+                        <div class="card" onclick="showCharacter(${char.id})" style="cursor:pointer">
                             <img src="${char.image}">
                             <div class="card-body">
                                 <h5>${char.name}</h5>

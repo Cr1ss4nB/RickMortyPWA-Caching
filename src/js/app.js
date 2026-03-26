@@ -1,6 +1,6 @@
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
+        navigator.serviceWorker.register('/RickMortyPWA-Caching/src/sw.js')
             .then(reg => console.log('SW registrado', reg))
             .catch(err => console.log('Error al registrar SW', err));
     });
@@ -8,6 +8,9 @@ if ('serviceWorker' in navigator) {
 
 const API_URL = 'https://rickandmortyapi.com/api/character';
 const container = document.getElementById('characters');
+    if (container) {
+        loadCharacters();
+    }
 
 // Este método obtiene personajes de la API y los muestra en pantalla
 function loadCharacters() {
@@ -74,5 +77,3 @@ function showCharacter(id) {
         })
         .catch(err => console.log(err));
 }
-
-loadCharacters();
