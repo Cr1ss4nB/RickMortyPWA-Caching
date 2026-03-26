@@ -1,5 +1,5 @@
-const CACHE_STATIC_NAME = 'static-v7';
-const CACHE_DYNAMIC_NAME = 'dynamic-v7';
+const CACHE_STATIC_NAME = 'static-v10';
+const CACHE_DYNAMIC_NAME = 'dynamic-v10';
 const CACHE_INMUTABLE_NAME = 'inmutable-v1';
 
 // Este método precachea el App Shell
@@ -60,16 +60,29 @@ self.addEventListener('fetch', event => {
 
     const url = event.request.url;
 
+    // API -> Network First
     if (url.includes('rickandmortyapi.com')) {
         event.respondWith(networkFirst(event.request));
         return;
     }
 
+    // Imágenes -> Stale While Revalidate
     if (event.request.destination === 'image') {
         event.respondWith(staleWhileRevalidate(event.request));
         return;
     }
 
+    // Navegación (HTML) -> manejar offline fallback aquí
+    if (event.request.mode === 'navigate') {
+        event.respondWith(
+            fetch(event.request).catch(() => {
+                return caches.match('./pages/offline.html');
+            })
+        );
+        return;
+    }
+
+    // App Shell -> Cache First
     event.respondWith(cacheFirst(event.request));
 });
 
